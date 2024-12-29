@@ -14,6 +14,7 @@ from scripts.animatediff_xyz import xyz_attrs
 from scripts.animatediff_logger import logger_animatediff as logger
 from scripts.animatediff_utils import get_controlnet_units, extract_frames_from_video
 
+
 supported_save_formats = ["GIF", "MP4", "WEBP", "WEBM", "PNG", "TXT"]
 
 class ToolButton(gr.Button, gr.components.FormComponent):

@@ -2,21 +2,27 @@ import os
 
 import torch
 from modules import hashes, shared, sd_models
-from modules_forge.unet_patcher import UnetPatcher
-
-from ldm_patched.modules.model_management import get_torch_device, unet_dtype, unet_manual_cast
-from ldm_patched.modules.ops import manual_cast
-
-from motion_module import MotionWrapper, MotionModuleType
+from backend.patcher.unet import UnetPatcher
+from backend.memory_management import get_torch_device, unet_dtype, unet_manual_cast
+from modules.devices import manual_cast
 from scripts.animatediff_logger import logger_animatediff as logger
+
+try:
+    from motion_module import MotionWrapper, MotionModuleType  # Local import to avoid circular import
+except ImportError:
+    import sys
+    motion_module = sys.modules.get('motion_module')
+    if not motion_module:
+        import motion_module  # type: ignore
+    MotionWrapper = motion_module.MotionWrapper
+    MotionModuleType = motion_module.MotionModuleType
 
 
 class AnimateDiffMM:
     def __init__(self):
-        self.mm: MotionWrapper = None
+        self.mm = None
         self.script_dir = None
         self.ad_params = None
-
 
     def set_script_dir(self, script_dir):
         self.script_dir = script_dir

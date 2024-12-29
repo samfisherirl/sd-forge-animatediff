@@ -2,7 +2,7 @@ import gc
 import numpy as np
 import torch
 
-from ldm_patched.modules.model_management import get_torch_device, soft_empty_cache
+from backend.memory_management import get_torch_device, soft_empty_cache
 from modules import shared
 from modules.sd_samplers_cfg_denoiser import pad_cond
 from modules.script_callbacks import CFGDenoiserParams

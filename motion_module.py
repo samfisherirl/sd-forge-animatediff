@@ -1,13 +1,21 @@
+from backend.nn.unet import FeedForward
 from enum import Enum
 from typing import Optional
-
 import math
 import torch
 from torch import nn
 from einops import rearrange
+from modules import hashes, shared, sd_models
+from backend.memory_management import get_torch_device, unet_dtype, unet_manual_cast
+from modules.devices import manual_cast
+from scripts.animatediff_logger import logger_animatediff as logger
 
-from ldm_patched.ldm.modules.attention import FeedForward
-from ldm_patched.modules.ops import disable_weight_init
+
+def disable_weight_init(module):
+    for p in module.parameters():
+        p.detach().zero_()
+    return module
+
 
 
 class MotionModuleType(Enum):
